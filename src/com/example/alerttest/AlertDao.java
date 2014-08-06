@@ -34,10 +34,7 @@ public class AlertDao{
 		Cursor cursor = db.query(TBL_NAME, COLUMNS, null, null, null, null, USR_ID);
 
 		while(cursor.moveToNext()){
-			AlertEntity entity = new AlertEntity();
-			entity.setRowId(cursor.getInt(0));
-			entity.setName(cursor.getString(1));
-			entity.setScore(cursor.getInt(2));
+			AlertEntity entity = cursorToEntity(cursor);
 			entityList.add(entity);
 		}
 
@@ -52,13 +49,8 @@ public class AlertDao{
 	public AlertEntity findById(int rowId){
 		String selection = USR_ID + "=" + rowId;
 		Cursor cursor = db.query(TBL_NAME, COLUMNS, selection, null, null, null, null);
-
 		cursor.moveToNext();
-		AlertEntity entity = new AlertEntity();
-		entity.setRowId(cursor.getInt(0));
-		entity.setName(cursor.getString(1));
-		entity.setScore(cursor.getInt(2));
-
+		AlertEntity entity = cursorToEntity(cursor);
 		return entity;
 	}
 
@@ -74,6 +66,19 @@ public class AlertDao{
 		String whereClause = USR_ID + "=" + entity.getRowId();
 
 		return db.update(TBL_NAME, values, whereClause, null);
+	}
+	
+	/**
+	 * CursorからEntityへ変換
+	 * @param cursor
+	 * @return
+	 */
+	public AlertEntity cursorToEntity(Cursor cursor){
+		AlertEntity entity = new AlertEntity();
+		entity.setRowId(cursor.getInt(0));
+		entity.setName(cursor.getString(1));
+		entity.setScore(cursor.getInt(2));
+		return entity;
 	}
 
 }
