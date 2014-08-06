@@ -1,5 +1,6 @@
 package com.example.alerttest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +25,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	// listview
 	ListView lv;
 	ArrayAdapter<String> adapter;
+	//結果
+	ArrayList<String> resultsList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +36,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// ボタンイベント
 		findViewById(R.id.timerbtn).setOnClickListener(this);
 		findViewById(R.id.stopbtn).setOnClickListener(this);
-
-		// データベース
+		
+		//DB+DAO
 		SQLiteDatabase db = helper.getReadableDatabase();
 		dao = new AlertDao(db);
 
-		// listview
-		List<AlertEntity> entityList = dao.findAll();
-		String[] str = new String[entityList.size()];
-		int i = -1;
-		for(AlertEntity entity: entityList) {
-			i++;
-			str[i] = entity.getName().toString() + "(" + String.valueOf(entity.getScore() + ")" );
-		}
+		//ListView設定
 		lv = (ListView) findViewById(R.id.resultView1);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, str);
+		resultsList = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, resultsList);
 		lv.setAdapter(adapter);
+		
+		//データ更新
+		changeData();
 
 		// レシーバー
 		mReceiver = new AlertTestReceiver();
@@ -60,27 +60,25 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	//表示データの更新
     protected void changeData() {
+		
+    	List<AlertEntity> entityList = dao.findAll();
+    	
+    	//Stringsを更新
+    	resultsList.clear();							
+		for(AlertEntity entity: entityList) 
+			resultsList.add(entity.getName().toString() + "(" + String.valueOf(entity.getScore() + ")" ));
+
 		adapter.notifyDataSetChanged();
-
-		SQLiteDatabase db = helper.getReadableDatabase();
-		dao = new AlertDao(db);
-
-		// リスト化
-		createList();
     }
 
-    private void createList(){
-        List<AlertEntity> entityList = dao.findAll();
-		// listview
-		String[] str = new String[entityList.size()];
-		int i = -1;
-		for(AlertEntity entity: entityList) {
-			i++;
-			str[i] = entity.getName().toString() + "(" + String.valueOf(entity.getScore() + ")" );
-		}
-		lv = (ListView) findViewById(R.id.resultView1);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, str);
-		lv.setAdapter(adapter);
+    /*
+     * Entity list to ArrayList
+     */
+    protected ArrayList<String> entityToArrayList(List<AlertEntity> entityList){
+    	ArrayList<String> result = new ArrayList<String>();
+    	for(AlertEntity entity: entityList) 
+    		result.add(entity.getName().toString() + "(" + String.valueOf(entity.getScore() + ")" ));
+    	return result;
     }
 
 	public void onClick(View v){
