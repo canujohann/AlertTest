@@ -22,7 +22,7 @@ public class MainService extends Service{
 
 	@Override
 	public void onCreate(){
-		AlertHelper helper = new AlertHelper(this, null, 1);
+		AlertHelper helper = new AlertHelper(this);
 		db = helper.getWritableDatabase();
 	}
 

@@ -20,7 +20,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	// receiver
 	private AlertTestReceiver mReceiver = null;
 	// helper
-	private AlertHelper helper = new AlertHelper(this, null, 1);
+	private AlertHelper helper = new AlertHelper(this);
 	// listview
 	ListView lv;
 	ArrayAdapter<String> adapter;

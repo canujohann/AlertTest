@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlertHelper extends SQLiteOpenHelper{
 	// テーブル作成用SQL
 	static String TABLE_NAME = "user";
+	static int DATABASE_VERSION = 1; 
 	private static final String CREATE_TABLE_SQL =	"" +
 													"create table " + TABLE_NAME +  " (" +
 														"rawid integer primary key autoincrement, " +
@@ -26,8 +27,8 @@ public class AlertHelper extends SQLiteOpenHelper{
 	 * @param factory
 	 * @param version
 	 */
-	public AlertHelper(Context context, CursorFactory factory, int version){
-		super(context, TABLE_NAME, factory, version);
+	public AlertHelper(Context context){
+		super(context, TABLE_NAME, null, DATABASE_VERSION);
 	}
 
 	//テーブル生成
