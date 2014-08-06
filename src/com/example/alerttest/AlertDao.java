@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class AlertDao{
 	// 定数
-	private static final String TBL_NAME = "user";
 	private static final String USR_ID = "rowId";
 	private static final String USR_NAME = "name";
 	private static final String USR_SCORE = "score";
@@ -31,7 +30,7 @@ public class AlertDao{
 	 */
 	public List<AlertEntity> findAll(){
 		List<AlertEntity> entityList = new ArrayList<AlertEntity>();
-		Cursor cursor = db.query(TBL_NAME, COLUMNS, null, null, null, null, USR_ID);
+		Cursor cursor = db.query(AlertHelper.TABLE_NAME, COLUMNS, null, null, null, null, USR_ID);
 
 		while(cursor.moveToNext()){
 			AlertEntity entity = cursorToEntity(cursor);
@@ -48,7 +47,7 @@ public class AlertDao{
 	 */
 	public AlertEntity findById(int rowId){
 		String selection = USR_ID + "=" + rowId;
-		Cursor cursor = db.query(TBL_NAME, COLUMNS, selection, null, null, null, null);
+		Cursor cursor = db.query(AlertHelper.TABLE_NAME, COLUMNS, selection, null, null, null, null);
 		cursor.moveToNext();
 		AlertEntity entity = cursorToEntity(cursor);
 		return entity;
@@ -65,7 +64,7 @@ public class AlertDao{
 		values.put(USR_SCORE,entity.getScore());
 		String whereClause = USR_ID + "=" + entity.getRowId();
 
-		return db.update(TBL_NAME, values, whereClause, null);
+		return db.update(AlertHelper.TABLE_NAME, values, whereClause, null);
 	}
 	
 	/**
